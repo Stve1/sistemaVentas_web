@@ -1,0 +1,209 @@
+<section class="col-12" style="padding: 1%;">
+  <div class="row">
+    <div class="col-1">
+      <div class="card">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Active</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="col-11">
+      <div class="card">
+        <div class="card" style="margin: 1%;">
+          <h2>Ventas</h2>
+        </div>
+
+        <!--FORMULARIO REGISTRO DE PRODUCTOS-->
+        <div class="card" style="margin:1%; padding: 1%;">
+          <div class="row">
+            <div class="col-6">
+              <form [formGroup]="formVentas">
+                <div class="row">
+
+                  <div class="col-5" style="padding-right: 0;">
+                    <label for="id">Producto
+                      <input type="text" formControlName="id" name="id">
+                    </label>
+                  </div>
+                  <div class="col-5" style="padding-left: 0;">
+                    <label for="precio">Precio
+                      <input type="number" formControlName="precio" name="precio" class="col-8">
+                    </label>
+                  </div>
+
+                </div>
+
+                <div class="row" style="margin-top: 2%">
+                  <div class="col-4">
+                    <label for="cantidad">Cantidad
+                      <input type="number" formControlName="cantidad" name="cantidad" class="col-5">
+                    </label>
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-6">
+                    <div class="row col-12">
+                      <div class="col-4" style="margin-right: 0; padding-right: 0;">
+                        <p>Descuento</p>
+                      </div>
+
+                      <div class="col-3" style="margin-left: 0;padding-left: 1%; padding: 0.5% 0;">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" style="margin-right: 0;"
+                          formControlName="descuentoButton" (change)="haveDiscount()">
+                          <label class="form-check-label" for="flexSwitchCheckDefault" style="margin-left: 0;">Sí</label>
+                        </div>
+                      </div>
+
+                      <div class="col-5" *ngIf="aplicaDescuento == true">
+                        <input type="number" formControlName="vlrDescuento" name="vlrDescuento" class="col-12">
+                      </div>
+
+
+
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row" style="margin-top: 1%">
+                  <div class="col-4">
+                    <button class="btn btn-danger" (click)="agregarProducto(modalForm)">Agregar</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+
+            <!--CARRITO DE COMPRAS-->
+            <div class="col-6" style="background-color: aqua;">
+              <div class="card">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Producto</th>
+                      <th scope="col">Precio.</th>
+                      <th scope="col">Cantidad.</th>
+                      <th scope="col">Descuento.</th>
+                      <th scope="col">Acción.</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor="let producto of carritoCompras">
+                    <tr>
+                      <td>{{producto.name}}</td>
+                      <td>{{producto.precio}}</td>
+                      <td>{{producto.cantidad}}</td>
+                      <td>{{producto.vlrDescuento}}</td>
+                      <td><button (click)="eliminarProducto(producto)">Eliminar</button></td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <button class="btn btn-primary" (click)="enviarProductos()">ENVIAR</button>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!--LISTA DE PRODUCTOS EN CATÁLOGO-->
+        <div class="card" style="margin: 1%; padding: 1%;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Agregar</th>
+                <th scope="col">#Cód.</th>
+                <th scope="col">Producto.</th>
+                <th scope="col">Descripción.</th>
+                <th scope="col">Modelos.</th>
+                <th scope="col">Precio.</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let prod of repuestos">
+              <tr>
+                <td><button (click)="modalProducto(modalForm, prod)">Agregar</button></td>
+                <td>{{prod.id}}</td>
+                <td>{{prod.name}}</td>
+                <td>{{prod.descripcion}}</td>
+                <td>{{prod.modelo}}</td>
+                <td>{{prod.precio}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<ng-template #modalForm>
+  <ng-container class="row" >
+    <div >
+      <div class="modal-header"> <h4>Producto</h4></div>
+      <div class="modal-body">
+        <form [formGroup]="formVentas">
+          <div class="row" style="margin-top: 2%">
+            <div class="col-4">
+              <input type="text" formControlName="name" name="name" hidden>
+              <label for="cantidad">Cantidad
+                <input type="number" formControlName="cantidad" name="cantidad" class="col-5">
+              </label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 2%;">
+            <div class="col-6">
+              <div class="row col-12">
+                <div class="col-4" style="margin-right: 0; padding-right: 0;">
+                  <p>Descuento</p>
+                </div>
+
+                <div class="col-3" style="margin-left: 0;padding-left: 1%; padding: 0.5% 0;">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" style="margin-right: 0;"
+                    formControlName="descuentoButton" (change)="haveDiscount()">
+                    <label class="form-check-label" for="flexSwitchCheckDefault" style="margin-left: 0;">Sí</label>
+                  </div>
+                </div>
+
+                <input type="number" formControlName="precio" name="precio" hidden>
+
+                <div class="col-5" *ngIf="aplicaDescuento == true">
+                  <input type="number" formControlName="vlrDescuento" name="vlrDescuento" class="col-12">
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row" style="margin-top: 1%">
+            <div class="col-4">
+              <button class="btn btn-primary" (click)="agregarProducto(modalForm)">Agregar</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </ng-container>
+</ng-template>
