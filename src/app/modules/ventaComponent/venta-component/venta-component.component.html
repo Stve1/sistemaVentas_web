@@ -26,9 +26,10 @@
           <h2>Ventas</h2>
         </div>
 
-        <!--FORMULARIO REGISTRO DE PRODUCTOS-->
         <div class="card" style="margin:1%; padding: 1%;">
           <div class="row">
+            <!--FORMULARIO REGISTRO DE PRODUCTOS-->
+            <!--
             <div class="col-6">
               <form [formGroup]="formVentas">
                 <div class="row">
@@ -88,34 +89,43 @@
 
               </form>
             </div>
+            -->
 
             <!--CARRITO DE COMPRAS-->
-            <div class="col-6" style="background-color: aqua;">
-              <div class="card">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Producto</th>
-                      <th scope="col">Precio.</th>
-                      <th scope="col">Cantidad.</th>
-                      <th scope="col">Descuento.</th>
-                      <th scope="col">Acción.</th>
-                    </tr>
-                  </thead>
-                  <tbody *ngFor="let producto of carritoCompras">
-                    <tr>
-                      <td>{{producto.name}}</td>
-                      <td>{{producto.precio}}</td>
-                      <td>{{producto.cantidad}}</td>
-                      <td>{{producto.vlrDescuento}}</td>
-                      <td><button (click)="eliminarProducto(producto)">Eliminar</button></td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <button class="btn btn-primary" (click)="enviarProductos()">ENVIAR</button>
-                  </tfoot>
-                </table>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Producto</th>
+                  <th scope="col">Precio.</th>
+                  <th scope="col">Cantidad.</th>
+                  <th scope="col">Descuento.</th>
+                  <th scope="col">Vlr Descuento.</th>
+                  <th scope="col">Acción.</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let producto of carritoCompras">
+                <tr>
+                  <td>{{producto.name}}</td>
+                  <td>{{producto.precio | currency}}</td>
+                  <td>{{producto.cantidad}}</td>
+                  <td>{{producto.descuento}}</td>
+                  <td>{{producto.vlrDescuento | currency}}</td>
+                  <td><button (click)="eliminarProducto(producto)">Eliminar</button></td>
+                </tr>
+              </tbody>
+              <tfoot>
+
+                &nbsp;&nbsp;<strong>Total: &nbsp; {{totalVenta | currency}}</strong>
+
+
+              </tfoot>
+            </table>
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4">
+                <button class="btn btn-primary" (click)="enviarProductos()">ENVIAR</button>
               </div>
+              <div class="col-4"></div>
             </div>
           </div>
 
@@ -186,7 +196,8 @@
 
                 <input type="number" formControlName="precio" name="precio" hidden>
 
-                <div class="col-5" *ngIf="aplicaDescuento == true">
+                <!--<div class="col-5" *ngIf="aplicaDescuento == true">-->
+                  <div class="col-5">
                   <input type="number" formControlName="vlrDescuento" name="vlrDescuento" class="col-12">
                 </div>
 

@@ -1,8 +1,9 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from "@angular/material/table";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-venta-component',
@@ -15,6 +16,8 @@ export class VentaComponentComponent implements OnInit{
   ngOnInit(): void {
     console.log("NG ONNIT")
   }
+
+  totalVenta:number = 0;
 
   formVentas = new FormGroup({
     id: new FormControl(),
@@ -80,7 +83,20 @@ export class VentaComponentComponent implements OnInit{
 
     console.log("NEW PRODUCT");
     console.log(newProduct);
+    this.totalVenta = 0;
     this.carritoCompras.push(newProduct);
+
+    if(this.carritoCompras.length > 0){
+      for(let i = 0; i < this.carritoCompras.length; i++){
+        if(this.carritoCompras[i].descuento == 'S'){
+          this.totalVenta = ((this.carritoCompras[i].precio * this.carritoCompras[i].cantidad) - (this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cantidad)) + this.totalVenta;
+        } else{
+          this.totalVenta = ((this.carritoCompras[i].precio * this.carritoCompras[i].cantidad) +(this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cantidad)) + this.totalVenta;
+        }
+      }
+    } else {
+      this.totalVenta = 0;
+    }
 
     this.closModalProd();
 
@@ -92,14 +108,41 @@ export class VentaComponentComponent implements OnInit{
   }
 
   closModalProd(){
+    this.limpiarForm();
     this._modal.dismissAll();
   }
 
+  limpiarForm(){
+    this.formVentas.patchValue({
+      id: 0,
+      name: '',
+      precio: 0,
+      cantidad: 0,
+      descuentoButton: false,
+      vlrDescuento: 0
+    });
+  }
+
   eliminarProducto(producto:any){
+    this.totalVenta = 0;
     this.carritoCompras = this.carritoCompras.filter((p) =>  producto.id != p.id);
+    if(this.carritoCompras.length > 0){
+      for(let i = 0; i < this.carritoCompras.length; i++){
+        this.totalVenta = (this.carritoCompras[i].precio * this.carritoCompras[i].cantidad)
+      }
+    } else{
+      this.totalVenta = 0;
+    }
   }
 
   enviarProductos(){
+    if(this.carritoCompras.length < 1){
+      Swal.fire({
+        title: 'Debe agregar algún producto.',
+        confirmButtonColor: '#ec5353',
+        icon: 'error'
+      })
+    }
     console.log(this.carritoCompras);
   }
 
