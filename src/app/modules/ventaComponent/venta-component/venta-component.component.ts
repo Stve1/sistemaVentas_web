@@ -126,13 +126,27 @@ export class VentaComponentComponent implements OnInit{
   eliminarProducto(producto:any){
     this.totalVenta = 0;
     this.carritoCompras = this.carritoCompras.filter((p) =>  producto.id != p.id);
+
+    if(this.carritoCompras.length > 0){
+      for(let i = 0; i < this.carritoCompras.length; i++){
+        if(this.carritoCompras[i].descuento == 'S'){
+          this.totalVenta = ((this.carritoCompras[i].precio * this.carritoCompras[i].cantidad) - (this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cantidad)) + this.totalVenta;
+        } else{
+          this.totalVenta = ((this.carritoCompras[i].precio * this.carritoCompras[i].cantidad) +(this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cantidad)) + this.totalVenta;
+        }
+      }
+    } else {
+      this.totalVenta = 0;
+    }
+
+    /*
     if(this.carritoCompras.length > 0){
       for(let i = 0; i < this.carritoCompras.length; i++){
         this.totalVenta = (this.carritoCompras[i].precio * this.carritoCompras[i].cantidad)
       }
     } else{
       this.totalVenta = 0;
-    }
+    }*/
   }
 
   enviarProductos(){
