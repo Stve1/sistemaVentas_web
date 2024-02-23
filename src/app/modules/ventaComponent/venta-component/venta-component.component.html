@@ -1,6 +1,6 @@
 <section class="col-12" style="padding: 1%;">
   <div class="row">
-    <div class="col-1">
+    <!--<div class="col-1">
       <div class="card">
         <ul class="nav flex-column">
           <li class="nav-item">
@@ -18,16 +18,16 @@
         </ul>
       </div>
 
-    </div>
+    </div>-->
 
-    <div class="col-11">
+    <div class="col-12">
       <div class="card">
         <div class="card" style="margin: 1%;">
           <h2>Ventas</h2>
         </div>
 
         <div class="card" style="margin:1%; padding: 1%;">
-          <div class="row">
+          <div class="row" style="padding: 0 1%;">
 
             <!--CARRITO DE COMPRAS-->
             <table class="table">
@@ -43,9 +43,9 @@
               </thead>
               <tbody *ngFor="let producto of carritoCompras">
                 <tr>
-                  <td>{{producto.name}}</td>
-                  <td>{{producto.precio | currency}}</td>
-                  <td>{{producto.cantidad}}</td>
+                  <td>{{producto.nombre_producto}}</td>
+                  <td>{{producto.precio_producto | currency}}</td>
+                  <td>{{producto.cant_producto}}</td>
                   <td>{{producto.descuento}}</td>
                   <td>{{producto.vlrDescuento | currency}}</td>
                   <td><button (click)="eliminarProducto(producto)">Eliminar</button></td>
@@ -79,15 +79,17 @@
                 <th scope="col">Producto.</th>
                 <th scope="col">Modelos.</th>
                 <th scope="col">Precio.</th>
+                <th scope="col">Precio Nuevo.</th>
               </tr>
             </thead>
             <tbody *ngFor="let prod of repuestos">
               <tr>
-                <td><button (click)="modalProducto(modalForm, prod)">Agregar</button></td>
+                <td><button (click)="modalProducto(modalForm, prod)" class="btn btn-success">Agregar</button></td>
                 <td>{{prod.cod_producto}}</td>
                 <td>{{prod.nombre_producto}}</td>
                 <td>{{prod.aplicacion_productos}}</td>
-                <td>{{prod.precio_producto | currency}}</td>
+                <td [ngClass]="{'precioProducto' : prod.precio_producto > prod.precio2_producto}">{{prod.precio_producto | currency}}</td>
+                <td [ngClass]="{'precioProducto' : prod.precio2_producto > prod.precio_producto}">{{prod.precio2_producto | currency}}</td>
               </tr>
             </tbody>
           </table>
@@ -102,15 +104,30 @@
 
 <ng-template #modalForm>
   <ng-container class="row" >
-    <div >
-      <div class="modal-header"> <h4>Producto</h4></div>
+    <div>
+      <div class="modal-header">
+        <h2 class="col-2">Producto</h2>
+        <div class="col-9"></div>
+        <div class="col-1"><button class="btn btn-close" style="margin-left: 50%;" (click)="closModalProd()"></button></div>
+      </div>
       <div class="modal-body">
         <form [formGroup]="formVentas">
+          <input type="text" formControlName="id_producto" name="id_producto" hidden>
+          <input type="text" formControlName="nombre_producto" name="nombre_producto" hidden>
+          <input type="number" formControlName="costo_producto" name="costo_producto" hidden>
+          <input type="number" formControlName="cod_producto" name="cod_producto" hidden>
+          <div class="row" style="margin-top: 1%; margin-bottom: 2%;">
+            <div class="col-7">
+              <label for="precio_producto">Precio
+                <input type="text" formControlName="precio_producto" name="precio_producto" class="form-control col-5"  thousandSeparator="." [mask]="'separator'">
+              </label>
+            </div>
+          </div>
+
           <div class="row" style="margin-top: 2%">
             <div class="col-4">
-              <input type="text" formControlName="name" name="name" hidden>
-              <label for="cantidad">Cantidad
-                <input type="number" formControlName="cantidad" name="cantidad" class="col-5">
+              <label for="cant_producto">Cantidad
+                <input type="number" formControlName="cant_producto" name="cant_producto" class="col-5 form-control">
               </label>
             </div>
           </div>
@@ -130,11 +147,9 @@
                   </div>
                 </div>
 
-                <input type="number" formControlName="precio" name="precio" hidden>
-
                 <!--<div class="col-5" *ngIf="aplicaDescuento == true">-->
                   <div class="col-5">
-                  <input type="number" formControlName="vlrDescuento" name="vlrDescuento" class="col-12">
+                  <input type="number" formControlName="vlrDescuento" name="vlrDescuento" class="form-control col-12" thousandSeparator="." [mask]="'separator'">
                 </div>
 
               </div>
@@ -144,7 +159,7 @@
 
           <div class="row" style="margin-top: 1%">
             <div class="col-4">
-              <button class="btn btn-primary" (click)="agregarProducto(modalForm)">Agregar</button>
+              <button class="btn btn-success" (click)="agregarProducto()">Agregar</button>
             </div>
           </div>
 
