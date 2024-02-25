@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" >Navbar</a>
+    <a class="navbar-brand" >Sistema ventas</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,7 +8,15 @@
       <div class="navbar-nav">
         <a class="nav-link" routerLink="home">Home</a>
         <a class="nav-link" routerLink="ventaProductos">Venta</a>
-        <a class="nav-link" routerLink="reporteVentas">Reportes</a>
+        <!--s<a class="nav-link" routerLink="reporteVentas">Reportes</a>-->
+        <div class="dropdown">
+          <a class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Reportes</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="nav-link dropdown-item" routerLink="reporteVentas" style="color: white;">Ventas</a></li>
+            <li><a class="nav-link dropdown-item" routerLink="reporteVentas" style="color: white;">Salidas</a></li>
+            <li><a class="nav-link dropdown-item" routerLink="reporteVentas" style="color: white;">Diarios</a></li>
+          </ul>
+        </div>
         <a class="nav-link disabled" aria-disabled="true">Disabled</a>
       </div>
     </div>
