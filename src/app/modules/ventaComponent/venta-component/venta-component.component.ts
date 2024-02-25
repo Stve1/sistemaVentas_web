@@ -65,7 +65,7 @@ export class VentaComponentComponent implements OnInit{
     }
 
     this.formVentas.patchValue({
-      id_producto: prod.cod_producto,
+      id_producto: prod.id_producto,
       nombre_producto: prod.nombre_producto,
       aplicacion_productos: prod.aplicacion_productos,
       costo_producto: prod.costo_producto,
@@ -143,7 +143,7 @@ export class VentaComponentComponent implements OnInit{
 
   eliminarProducto(producto:any){
     this.totalVenta = 0;
-    this.carritoCompras = this.carritoCompras.filter((p) =>  producto.id != p.id);
+    this.carritoCompras = this.carritoCompras.filter((p) =>  producto.id_producto != p.id_producto);
 
     if(this.carritoCompras.length > 0){
       for(let i = 0; i < this.carritoCompras.length; i++){
@@ -172,7 +172,7 @@ export class VentaComponentComponent implements OnInit{
         title: 'Debe agregar algún producto.',
         confirmButtonColor: '#ec5353',
         icon: 'error'
-      })
+      });
     } else{
       for (let i = 0; i < this.carritoCompras.length; i++) {
         if(this.carritoCompras[i].descuento == 'S'){
@@ -217,6 +217,20 @@ export class VentaComponentComponent implements OnInit{
                   console.log(rProd);
                   if(rProd > 0){
                     this.countProducts = this.countProducts + 1;
+                    if(this.countProducts == this.carritoCompras.length){
+                      Swal.fire({
+                        title: 'Venta registrada.',
+                        showConfirmButton: false,
+                        icon: 'success',
+                        timer: 2000
+                      }).then((result) =>{
+                        if(result.isDismissed){
+                          console.log(result.isDismissed);
+                          window.location.reload();
+                        }
+                        //window.location.reload();
+                      });
+                    }
                   }
                 }
               );
