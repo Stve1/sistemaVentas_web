@@ -1,0 +1,47 @@
+<section class="col-12" style="padding: 1%;">
+  <div class="row">
+    <div class="col-12">
+      <div class="modal-body">
+        <form [formGroup]="formSalida">
+          <input type="number" formControlName="id_salida" name="id_salida" hidden>
+          <div class="row" style="margin-top: 1%; margin-bottom: 2%;">
+            <div class="col-7">
+              <label for="descripcion_salida"> <strong> Descripción salida </strong>
+                <input type="text" formControlName="descripcion_salida" name="descripcion_salida" class="form-control col-5">
+              </label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 2%">
+            <div class="col-4">
+              <label for="valor_salida"> <strong> Valor salida </strong>
+                <input type="text" formControlName="valor_salida" name="valor_salida" class="form-control col-5"  thousandSeparator="." [mask]="'separator'">
+              </label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 2%">
+            <div class="col-4">
+              <label for="metodo_pago"> <strong> Método pago </strong>
+                <select name="metodo_pago" id="metodo_pago" formControlName="metodo_pago_salida">
+                  <option value="1">Efectivo</option>
+                  <option value="2">Nequi</option>
+                  <option value="3">Bancolombia</option>
+                  <option value="4">Daviplata</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 1%">
+            <div class="col-4">
+              <button class="btn btn-danger" (click)="registrarSalida()">Registrar salida</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+</section>
