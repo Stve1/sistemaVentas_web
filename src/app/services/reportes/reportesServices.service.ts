@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { beProductos } from '../../models/beProductos';
 import { apiURLSettings } from '../../utils/constant';
 import { beReportes, beReportesSalidas, beReportesVentas } from '../../models/beReportes';
+import { beSalidas } from '../../models/beSalidas';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ReportesServicesService {
   }
 
   insertSalidas(body:any){
-    return this.http.post(`${this.apiURLSettings}/reportes/registrarSalida`, body);
+    return this.http.post<beSalidas>(`${this.apiURLSettings}/reportes/registrarSalida`, body);
   }
 
   getReportesSalidas(fechaInicio: string, fechaFin: string, id_unidad: number): Observable<beReportesSalidas[]> {

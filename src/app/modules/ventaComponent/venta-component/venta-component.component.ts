@@ -232,7 +232,7 @@ export class VentaComponentComponent implements OnInit{
           total_venta: this.totalVenta,
           id_cliente: 1,
           cantidad_productos: this.cantProductos,
-          metodoPago: metodo
+          metodo_pago: parseInt(metodo)
         }
 
         console.log("VENTA");
