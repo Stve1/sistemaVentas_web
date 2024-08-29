@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { beProductos } from '../../models/beProductos';
+import { beMetodos } from '../../models/beMetodos';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { beProductos } from '../../models/beProductos';
 export class VentasService {
 
   private apiURLSettings: string = apiURLSettings.url_api_bingoNova;
+  id_unidad: number = 1;
 
   constructor(private http: HttpClient) { }
 
@@ -23,6 +25,10 @@ export class VentasService {
 
   insertProdVentas(body:any){
     return this.http.post(`${this.apiURLSettings}/productos/registrarProductos`, body);
+  }
+
+  getMetodosPago(): Observable<beMetodos[]> {
+    return this.http.get<beMetodos[]>(`${this.apiURLSettings}/productos/obtenerMetodosPagos?id_unidad=${this.id_unidad}`);
   }
 
   //POST return this.http.post<any>(this.urlServicio+"/Serie_Sorteo/AdicionarSerie_Sorteos_Metavolante?numeracionSerie=", body)

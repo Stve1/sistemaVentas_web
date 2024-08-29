@@ -162,10 +162,28 @@ export class VentaComponentComponent implements OnInit{
   totalIncremento:number = 0;
   cantProductos:number = 0;
   countProducts: number = 0;
-  enviarProductos(){
+
+  arreglo:any = {
+
+  }
+  async enviarProductos(){
     this.totalDescuento = 0;
     this.totalIncremento = 0;
     this.cantProductos = 0;
+
+    this.arreglo = {
+      1: "Efectivo",
+      2: "Nequi",
+      3: "Daviplata",
+      4: "Bancolombia",
+    }
+
+    /*
+    "1": "Efectivo",
+    "2": "Nequi",
+    "3": "Daviplata",
+    "4": "Daviplata"
+    */
 
     if(this.carritoCompras.length < 1){
       Swal.fire({
@@ -174,70 +192,99 @@ export class VentaComponentComponent implements OnInit{
         icon: 'error'
       });
     } else{
-      for (let i = 0; i < this.carritoCompras.length; i++) {
-        if(this.carritoCompras[i].descuento == 'S'){
-          this.totalDescuento = ((this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cant_producto)) + this.totalDescuento;
-        } else{
-          this.totalIncremento = ((this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cant_producto)) + this.totalIncremento;
-        }
-        this.cantProductos = this.carritoCompras[i].cant_producto + this.cantProductos;
-      }
-
-      const ventasProductos = {
-        total_descuento: this.totalDescuento,
-        total_incremento: this.totalIncremento,
-        total_venta: this.totalVenta,
-        id_cliente: 1,
-        cantidad_productos: this.cantProductos
-      }
-
-      console.log("VENTA");
-      console.log(ventasProductos);
-
-      this.serVentas.insertVentasTot(ventasProductos).subscribe(
-        (res:any) =>{
-          if(res > 0){
-            console.log(res);
-
-            for (let v = 0; v < this.carritoCompras.length; v++) {
-              const prod = {
-                nombre_producto: this.carritoCompras[v].nombre_producto,
-                aplicacion_productos: this.carritoCompras[v].aplicacion_productos,
-                precio_producto: this.carritoCompras[v].precio_producto,
-                cant_producto: this.carritoCompras[v].cant_producto,
-                descuento_producto: this.carritoCompras[v].descuento == 'S' ? this.carritoCompras[v].vlrDescuento : 0,
-                incremento_producto :this.carritoCompras[v].descuento == 'S' ? 0 : this.carritoCompras[v].vlrDescuento,
-                cod_producto: this.carritoCompras[v].cod_producto
-              }
-
-              console.log("Productos");
-              console.log(prod);
-
-              this.serVentas.insertProdVentas(prod).subscribe((rProd:any) =>{
-                  console.log(rProd);
-                  if(rProd > 0){
-                    this.countProducts = this.countProducts + 1;
-                    if(this.countProducts == this.carritoCompras.length){
-                      Swal.fire({
-                        title: 'Venta registrada.',
-                        showConfirmButton: false,
-                        icon: 'success',
-                        timer: 2000
-                      }).then((result) =>{
-                        if(result.isDismissed){
-                          console.log(result.isDismissed);
-                          window.location.reload();
-                        }
-                        //window.location.reload();
-                      });
-                    }
-                  }
-                }
-              );
-            }
+      const inputOptions = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            "1": "Efectivo",
+            "2": "Nequi",
+            "3": "Daviplata",
+            "4": "Bancolombia"
+          });
+        }, 500);
+      });
+      const { value: metodo } = await Swal.fire({
+        title: "Seleccione el método de pago.",
+        input: "radio",
+        inputOptions,
+        confirmButtonColor: "#0000FF",
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        inputValidator: (value):any => {
+          if (!value) {
+            return "Seleccione el método de pago!";
           }
         }
-      );
+      });
+
+      if(metodo || metodo != undefined){
+        for (let i = 0; i < this.carritoCompras.length; i++) {
+          if(this.carritoCompras[i].descuento == 'S'){
+            this.totalDescuento = ((this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cant_producto)) + this.totalDescuento;
+          } else{
+            this.totalIncremento = ((this.carritoCompras[i].vlrDescuento * this.carritoCompras[i].cant_producto)) + this.totalIncremento;
+          }
+          this.cantProductos = this.carritoCompras[i].cant_producto + this.cantProductos;
+        }
+
+        const ventasProductos = {
+          total_descuento: this.totalDescuento,
+          total_incremento: this.totalIncremento,
+          total_venta: this.totalVenta,
+          id_cliente: 1,
+          cantidad_productos: this.cantProductos,
+          metodo_pago: parseInt(metodo)
+        }
+
+        console.log("VENTA");
+        console.log(ventasProductos);
+
+        this.serVentas.insertVentasTot(ventasProductos).subscribe(
+          (res:any) =>{
+            if(res > 0){
+              console.log(res);
+
+              for (let v = 0; v < this.carritoCompras.length; v++) {
+                const prod = {
+                  nombre_producto: this.carritoCompras[v].nombre_producto,
+                  aplicacion_productos: this.carritoCompras[v].aplicacion_productos,
+                  precio_producto: this.carritoCompras[v].precio_producto,
+                  cant_producto: this.carritoCompras[v].cant_producto,
+                  descuento_producto: this.carritoCompras[v].descuento == 'S' ? this.carritoCompras[v].vlrDescuento : 0,
+                  incremento_producto :this.carritoCompras[v].descuento == 'S' ? 0 : this.carritoCompras[v].vlrDescuento,
+                  cod_producto: this.carritoCompras[v].cod_producto
+                }
+
+                console.log("Productos");
+                console.log(prod);
+
+                this.serVentas.insertProdVentas(prod).subscribe((rProd:any) =>{
+                    console.log(rProd);
+                    if(rProd > 0){
+                      this.countProducts = this.countProducts + 1;
+                      if(this.countProducts == this.carritoCompras.length){
+                        Swal.fire({
+                          title: 'Venta registrada.',
+                          showConfirmButton: false,
+                          icon: 'success',
+                          timer: 2000
+                        }).then((result) =>{
+                          if(result.isDismissed){
+                            console.log(result.isDismissed);
+                            window.location.reload();
+                          }
+                          //window.location.reload();
+                        });
+                      }
+                    }
+                  }
+                );
+              }
+            }
+          }
+        );
+      }
+      console.log("metodo----");
+      console.log(metodo);
     }
     console.log(this.carritoCompras);
   }

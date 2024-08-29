@@ -4,11 +4,11 @@
       <div class="card">
         <div class="card" style="margin: 1%;">
           <div class="row">
-            <div class="col-2  div1">
-              <h2>Reporte ventas</h2>
+            <div class="col-2">
+              <h2>Reporte salidas</h2>
             </div>
             <div class="col-6">
-              <form [formGroup]="formReportVentas">
+              <form [formGroup]="formReportSalidas">
                 <div class="row" style="padding-top: 2%;">
                   <div class="col-2 " style="margin-right: 0; padding: 1% 0 0 1%;">
                     <h3>Fecha inicio</h3>
@@ -47,36 +47,27 @@
             <table class="table" id="ventasTable">
               <thead style="border: 1px;">
                 <tr>
-                  <th scope="col">Venta Nro.</th>
-                  <th scope="col">Fecha venta.</th>
-                  <th scope="col">Total descuento.</th>
-                  <th scope="col">Total incremento.</th>
-                  <th scope="col">Cantidad productos.</th>
-                  <th scope="col">Total venta.</th>
-                  <th scope="col">Nombre cliente.</th>
-                  <th scope="col">Método de pago.</th>
+                  <th scope="col">Salida Nro.</th>
+                  <th scope="col">Fecha salida.</th>
+                  <th scope="col">Valor salida.</th>
+                  <th scope="col">Descripción salida.</th>
+                  <th scope="col">Método pago.</th>
                 </tr>
               </thead>
-              <tbody *ngFor="let rVenta of ventas">
+              <tbody *ngFor="let rSalida of salidas">
                 <tr>
-                  <td>{{rVenta.id_venta}}</td>
-                  <td>{{rVenta.fecha_venta | date: 'yyyy-MM-dd'}}</td>
-                  <td>{{rVenta.total_descuento | number: '0.0-0'}}</td>
-                  <td>{{rVenta.total_incremento | number: '0.0-0'}}</td>
-                  <td>{{rVenta.cantidad_productos}}</td>
-                  <td>{{rVenta.total_venta | number: '0.0-0'}}</td>
-                  <td>{{rVenta.nombre_cliente}}</td>
-                  <td>{{rVenta.descripcion_metodo_pago}}</td>
+                  <td>{{rSalida.id_salida}}</td>
+                  <td>{{rSalida.fecha_salida | date: 'yyyy-MM-dd'}}</td>
+                  <td>{{rSalida.valor_salida | number: '0.0-0'}}</td>
+                  <td>{{rSalida.descripcion_salida}}</td>
+                  <td>{{rSalida.metodo_pago_salida}}</td>
                 </tr>
               </tbody>
               <tfoot style="border: 1px;">
                 <tr>
                   <td><strong>TOTAL</strong></td>
                   <td><strong></strong></td>
-                  <td><strong>{{totalDescuento | number: '0.0-0'}}</strong></td>
-                  <td><strong>{{totalIncremento | number: '0.0-0'}}</strong></td>
-                  <td><strong>{{cantidadProductos}}</strong></td>
-                  <td><strong>{{totalVenta | number: '0.0-0'}}</strong></td>
+                  <td><strong>{{totalValorSalida | number: '0.0-0'}}</strong></td>
                   <td><strong></strong></td>
                   <td><strong></strong></td>
                 </tr>

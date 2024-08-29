@@ -44,16 +44,16 @@
               <tbody *ngFor="let producto of carritoCompras">
                 <tr>
                   <td>{{producto.nombre_producto}}</td>
-                  <td>{{producto.precio_producto | currency}}</td>
+                  <td>{{producto.precio_producto | number: '0.0-0'}}</td>
                   <td>{{producto.cant_producto}}</td>
                   <td>{{producto.descuento}}</td>
-                  <td>{{producto.vlrDescuento | currency}}</td>
+                  <td>{{producto.vlrDescuento | number: '0.0-0'}}</td>
                   <td><button (click)="eliminarProducto(producto)" class="btn btn-danger">Eliminar</button></td>
                 </tr>
               </tbody>
               <tfoot>
 
-                &nbsp;&nbsp;<strong>Total: &nbsp; {{totalVenta | currency}}</strong>
+                &nbsp;&nbsp;<strong>Total: &nbsp; {{totalVenta | number: '0.0-0'}}</strong>
 
 
               </tfoot>
@@ -88,8 +88,8 @@
                 <td>{{prod.cod_producto}}</td>
                 <td>{{prod.nombre_producto}}</td>
                 <td>{{prod.aplicacion_productos}}</td>
-                <td [ngClass]="{'precioProducto' : prod.precio_producto > prod.precio2_producto}">{{prod.precio_producto | currency}}</td>
-                <td [ngClass]="{'precioProducto' : prod.precio2_producto > prod.precio_producto}">{{prod.precio2_producto | currency}}</td>
+                <td [ngClass]="{'precioProducto' : prod.precio_producto > prod.precio2_producto}">{{prod.precio_producto | number: '0.0-0' }}</td>
+                <td [ngClass]="{'precioProducto' : prod.precio2_producto > prod.precio_producto}">{{prod.precio2_producto | number: '0.0-0' }}</td>
               </tr>
             </tbody>
           </table>
