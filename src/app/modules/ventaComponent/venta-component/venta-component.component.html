@@ -69,6 +69,8 @@
 
         </div>
 
+        <input type="text" placeholder="Buscar" (keyup)="srch($event.target)" style="margin: 1%;">
+
         <!--LISTA DE PRODUCTOS EN CATÁLOGO-->
         <div class="card" style="margin: 1%; padding: 1%;">
           <table class="table">
@@ -76,20 +78,20 @@
               <tr>
                 <th scope="col">Agregar</th>
                 <th scope="col">#Cód.</th>
+                <th scope="col">Stock.</th>
                 <th scope="col">Producto.</th>
                 <th scope="col">Modelos.</th>
                 <th scope="col">Precio.</th>
-                <th scope="col">Precio Nuevo.</th>
               </tr>
             </thead>
             <tbody *ngFor="let prod of repuestos">
               <tr>
                 <td><button (click)="modalProducto(modalForm, prod)" class="btn btn-success">Agregar</button></td>
                 <td>{{prod.cod_producto}}</td>
+                <td>{{prod.cant_producto}}</td>
                 <td>{{prod.nombre_producto}}</td>
                 <td>{{prod.aplicacion_productos}}</td>
-                <td [ngClass]="{'precioProducto' : prod.precio_producto > prod.precio2_producto}">{{prod.precio_producto | number: '0.0-0' }}</td>
-                <td [ngClass]="{'precioProducto' : prod.precio2_producto > prod.precio_producto}">{{prod.precio2_producto | number: '0.0-0' }}</td>
+                <td >{{validaPrecio(prod) | number: '0.0-0'}}</td>
               </tr>
             </tbody>
           </table>

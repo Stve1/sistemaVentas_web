@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { VentasService } from '../../../services/ventas/ventas.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxMaskDirective } from 'ngx-mask';
+import { beProductos } from '../../../models/beProductos';
 
 @Component({
   selector: 'app-venta-component',
@@ -26,22 +27,45 @@ export class VentaComponentComponent implements OnInit{
     cant_producto: new FormControl(),
     cod_producto: new FormControl(),
     descuentoButton: new FormControl(),
-    vlrDescuento: new FormControl(),
-    costo2_producto: new FormControl(),
-    precio2_producto: new FormControl()
+    vlrDescuento: new FormControl()
   });
 
   aplicaDescuento:boolean = false;
   carritoCompras:any[]=[];
-  repuestos:any = [];
+  repuestos:beProductos[] = [];
+  repuestos2: beProductos[] = [];
   totalVenta:number = 0;
 
   ngOnInit(): void {
     this.serVentas.getProductos().subscribe(
       pr =>{
-        if(pr[0] != undefined){
-          this.repuestos = pr;
+        if(pr?.code > 0){
+          switch(pr?.code){
+            case 200:
+              this.repuestos = pr?.message;
+              this.repuestos2 = pr?.message;
+              console.log("pr.message");
+              console.log(pr.message);
+              break;
+
+              case 204:
+                break;
+
+              case 400:
+                break;
+
+              default:
+                console.log("default");
+                console.log(pr?.message);
+                break;
+          }
+        } else{
+
         }
+
+      }, (error)=>{
+        console.log("ERROR");
+        console.log(error);
       }
     );
   }
@@ -57,30 +81,41 @@ export class VentaComponentComponent implements OnInit{
   }
 
   precioProducto:number = 0;
-  datosTabla(prod:any){
-    if(prod.precio2_producto > prod.precio_producto){
-      this.precioProducto = prod.precio2_producto;
-    } else if(prod.precio_producto > prod.precio2_producto){
-      this.precioProducto = prod.precio_producto;
-    }
+  datosTabla(prod:beProductos){
+    console.log("prod");
+    console.log(prod);
 
+    this.precioProducto = this.validaPrecio(prod);
     this.formVentas.patchValue({
       id_producto: prod.id_producto,
       nombre_producto: prod.nombre_producto,
       aplicacion_productos: prod.aplicacion_productos,
-      costo_producto: prod.costo_producto,
+      costo_producto: prod.beCosto[0].costo_producto,
       precio_producto: this.precioProducto,
       cant_producto: 1,
       cod_producto: prod.cod_producto,
       descuentoButton: false,
       vlrDescuento: 0,
-      costo2_producto: prod.costo2_producto,
-      precio2_producto: prod.precio2_producto
     });
   }
 
   agregarProducto(){
+    var d = 0;
+    console.log("this.carritoCompras");
+    console.log(this.carritoCompras);
+    if(this.carritoCompras?.length > 0){
+      console.log("FIND");
+      for (let i = 0; i < this.carritoCompras?.length; i++) {
+        this.carritoCompras[i].id = i;
+        d = (i + 1 < this.carritoCompras?.length ? i : i + 1);
+      }
+
+    } else{
+      d = 0;
+    }
+
     const newProduct = {
+      id: d,
       id_producto: this.formVentas.controls.id_producto.value,
       nombre_producto: this.formVentas.controls.nombre_producto.value,
       aplicacion_productos: this.formVentas.controls.aplicacion_productos.value,
@@ -89,9 +124,7 @@ export class VentaComponentComponent implements OnInit{
       cant_producto: this.formVentas.controls.cant_producto.value,
       cod_producto: this.formVentas.controls.cod_producto.value,
       descuento: this.formVentas.controls.descuentoButton.value == true ? 'S' : 'N',
-      vlrDescuento: this.formVentas.controls.vlrDescuento.value,
-      costo2_producto: this.formVentas.controls.costo2_producto.value,
-      precio2_producto: this.formVentas.controls.precio2_producto.value
+      vlrDescuento: this.formVentas.controls.vlrDescuento.value
     }
 
     console.log("NEW PRODUCT");
@@ -135,15 +168,13 @@ export class VentaComponentComponent implements OnInit{
       cant_producto: 0,
       cod_producto: 0,
       descuentoButton: false,
-      vlrDescuento: 0,
-      costo2_producto: 0,
-      precio2_producto: 0
+      vlrDescuento: 0
     });
   }
 
   eliminarProducto(producto:any){
     this.totalVenta = 0;
-    this.carritoCompras = this.carritoCompras.filter((p) =>  producto.id_producto != p.id_producto);
+    this.carritoCompras = this.carritoCompras.filter((p) =>  producto.id != p.id);
 
     if(this.carritoCompras.length > 0){
       for(let i = 0; i < this.carritoCompras.length; i++){
@@ -164,8 +195,8 @@ export class VentaComponentComponent implements OnInit{
   countProducts: number = 0;
 
   arreglo:any = {
-
   }
+
   async enviarProductos(){
     this.totalDescuento = 0;
     this.totalIncremento = 0;
@@ -287,6 +318,35 @@ export class VentaComponentComponent implements OnInit{
       console.log(metodo);
     }
     console.log(this.carritoCompras);
+  }
+
+  srch(ip:any){
+    var val = ip?.value.toLowerCase();
+    this.repuestos = this.repuestos2;
+    var c = this.repuestos?.filter(
+      function(p:any){
+        if(p?.cod_producto?.toString().includes(val) || p?.aplicacion_productos?.toLowerCase().trim().includes(val) ||
+          p?.nombre_producto?.toLowerCase().trim().includes(val)
+        ){
+          return p;
+        } else{
+        }
+      }
+    );
+
+    this.repuestos = c;
+  }
+
+  validaPrecio(prod: beProductos){
+    var p = prod.bePrecio.find((p)=> Math.max(p.precio_producto));
+    var precio = 0;
+    if(p){
+      precio = p.precio_producto;
+
+    } else{
+
+    }
+    return precio;
   }
 
 }

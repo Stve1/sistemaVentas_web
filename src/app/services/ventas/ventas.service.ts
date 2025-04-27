@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { beProductos } from '../../models/beProductos';
 import { beMetodos } from '../../models/beMetodos';
+import { BeRes } from '../../models/BeRes';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class VentasService {
 
   constructor(private http: HttpClient) { }
 
-  getProductos(): Observable<beProductos[]> {
-    return this.http.get<beProductos[]>(`${this.apiURLSettings}/productos/obtenerProductos`);
+  getProductos(): Observable<BeRes> {
+    return this.http.get<BeRes>(`${this.apiURLSettings}/productos/obtenerProductos`);
   }
 
   insertVentasTot(body:any){
